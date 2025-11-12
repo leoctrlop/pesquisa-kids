@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pesquisa Kids ⭐</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #f7fafc;
+      color: #111827;
+      margin: 0; padding: 0;
+    }
+    .wrap {
+      max-width: 880px;
+      margin: 24px auto;
+      padding: 16px;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 24px rgba(0,0,0,.06);
+      padding: 20px;
+    }
+    h1 { margin-top: 0; }
+    .row { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    label { font-weight: 600; display: block; margin-bottom: 6px; }
+    input, textarea {
+      width: 100%; border: 1px solid #ddd; border-radius: 10px;
+      padding: 10px; font-size: 1rem;
+    }
+    textarea { min-height: 80px; resize: vertical; }
+    .chips { display:flex; gap:8px; flex-wrap:wrap; }
+    .chip {
+      background:#f3f4f6; border:1px solid #e5e7eb; border-radius:999px;
+      padding:8px 12px; cursor:pointer; user-select:none;
+    }
+    .chip.active { background:#eef2ff; border-color:#c7d2fe; }
+    .stars { display:flex; gap:8px; font-size:26px; cursor:pointer; }
+    .star { filter:grayscale(1) opacity(.35); transition:transform .1s,filter .1s; }
+    .star.active,.star.hover { filter:none; transform:scale(1.05); }
+    button {
+      background:#4f46e5; color:white; border:none; border-radius:10px;
+      padding:12px 16px; font-weight:700; cursor:pointer; font-size:1rem;
+    }
+    #ok { display:none; color:#059669; font-weight:600; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Pesquisa Kids ⭐</h1>
+      <p>Responda com sinceridade! 😊</p>
+
+      <form id="form">
+        <div class="row">
+          <div>
+            <label>Nome</label>
+            <input id="nome" required />
+          </div>
+          <div>
+            <label>Idade</label>
+            <input id="idade" type="number" min="5" max="12" required />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>O que você MAIS gostou no curso?</label>
+            <textarea id="gostou"></textarea>
+          </div>
+          <div>
+            <label>Teve algo que você NÃO gostou?</label>
+            <textarea id="nao_gostou"></textarea>
+          </div>
+        </div>
+
+        <div class="row">
+          <label>As aulas foram...</label>
+          <div class="chips" data-field="dificuldade">
+            <div class="chip">😄 Muito fáceis</div>
+            <div class="chip">🙂 Fáceis</div>
+            <div class="chip">😌 Normais</div>
+            <div class="chip">😅 Difíceis</div>
+            <div class="chip">😵 Muito difíceis</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <label>O professor explica bem?</label>
+          <div class="stars" data-field="prof_explica"></div>
+        </div>
+        <div class="row">
+          <label>O professor é simpático?</label>
+          <div class="stars" data-field="prof_simpatia"></div>
+        </div>
+        <div class="row">
+          <label>O professor chega no horário?</label>
+          <div class="stars" data-field="prof_pontualidade"></div>
+        </div>
+        <div class="row">
+          <label>O professor sabe bastante?</label>
+          <div class="stars" data-field="prof_conhecimento"></div>
+        </div>
+
+        <div class="row">
+          <label>Você recomendaria esse curso para um amigo?</label>
+          <div class="chips" data-field="recomendacao">
+            <div class="chip">👍 Sim</div>
+            <div class="chip">👎 Não</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <label><input type="checkbox" id="eu_pontual"> Eu chego no horário</label>
+          <label><input type="checkbox" id="eu_participo"> Eu participo bastante</label>
+          <label><input type="checkbox" id="eu_comporto"> Eu me comporto bem</label>
+        </div>
+
+        <button type="submit">Enviar</button>
+        <span id="ok">✅ Enviado com sucesso!</span>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const ENDPOINT = "https://script.google.com/macros/s/AKfycbyJxNbSspGJ2AEBVpjStwYYF2WpBUffVuUfSxvdUV5teNtm-kUsD9p82m3xiY58HFDt/exec"; // cole aqui o /exec do Apps Script
+
+    // Estrelas
+    const starBars = document.querySelectorAll(".stars");
+    const starValues = {};
+    starBars.forEach(bar => {
+      const field = bar.dataset.field;
+      starValues[field] = 0;
+      for (let i=1;i<=5;i++){
+        const s = document.createElement("span");
+        s.className = "star";
+        s.textContent = "★";
+        s.addEventListener("mouseenter", ()=>hover(field,i));
+        s.addEventListener("mouseleave", ()=>hover(field,0));
+        s.addEventListener("click", ()=>select(field,i));
+        bar.appendChild(s);
+      }
+    });
+    function paint(field){
+      const val = starValues[field];
+      const bar = document.querySelector(`.stars[data-field="${field}"]`);
+      [...bar.querySelectorAll(".star")].forEach((s,idx)=>s.classList.toggle("active", idx < val));
+    }
+    function hover(field,i){
+      const bar = document.querySelector(`.stars[data-field="${field}"]`);
+      [...bar.querySelectorAll(".star")].forEach((s,idx)=>s.classList.toggle("hover", idx < i));
+    }
+    function select(field,i){ starValues[field] = i; paint(field); }
+
+    // Chips
+    const groups = document.querySelectorAll(".chips");
+    groups.forEach(g => g.addEventListener("click", e => {
+      const chip = e.target.closest(".chip");
+      if (!chip) return;
+      g.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      g.dataset.value = chip.textContent.trim();
+    }));
+
+    function valueFromChips(field){
+      const g = document.querySelector(`.chips[data-field="${field}"]`);
+      return g?.dataset?.value || "";
+    }
+    function valueFromStars(field){
+      return starValues[field] || 0;
+    }
+
+    // Envio
+    document.getElementById("form").addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      const nome = document.getElementById("nome").value.trim();
+      const idade = document.getElementById("idade").value.trim();
+      if (!nome || !idade){ alert("Preencha nome e idade 🙂"); return; }
+
+      const data = {
+        nome, idade,
+        gostou: document.getElementById("gostou").value.trim(),
+        nao_gostou: document.getElementById("nao_gostou").value.trim(),
+        dificuldade: valueFromChips("dificuldade"),
+        prof_explica: valueFromStars("prof_explica"),
+        prof_simpatia: valueFromStars("prof_simpatia"),
+        prof_pontualidade: valueFromStars("prof_pontualidade"),
+        prof_conhecimento: valueFromStars("prof_conhecimento"),
+        recomendacao: valueFromChips("recomendacao"),
+        eu_pontual: document.getElementById("eu_pontual").checked ? "Sim" : "Não",
+        eu_participo: document.getElementById("eu_participo").checked ? "Sim" : "Não",
+        eu_comporto: document.getElementById("eu_comporto").checked ? "Sim" : "Não",
+        timestamp: new Date().toISOString()
+      };
+
+      try{
+        await fetch(ENDPOINT, {
+          method: "POST",
+          mode: "no-cors",
+          body: JSON.stringify(data)
+        });
+        document.getElementById("ok").style.display = "inline-block";
+        e.target.reset();
+      }catch(err){
+        alert("Não foi possível enviar agora. Verifique sua conexão.");
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>
