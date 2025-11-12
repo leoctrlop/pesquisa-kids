@@ -5,73 +5,107 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Pesquisa Kids ⭐</title>
   <style>
-    body {
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #f7fafc;
-      color: #111827;
-      margin: 0; padding: 0;
+    :root{
+      --bg:#f7fafc; --card:#fff; --ink:#111827; --muted:#6b7280; --accent:#4f46e5;
+      --divider:#e5e7eb; --chip:#f3f4f6; --chip-on:#eef2ff; --success:#059669;
+      --teacher:#e0e7ff; --student:#dcfce7;
     }
-    .wrap {
-      max-width: 880px;
-      margin: 24px auto;
-      padding: 16px;
+    *{box-sizing:border-box}
+    body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);margin:0}
+    .wrap{max-width:920px;margin:24px auto;padding:16px}
+    .card{background:var(--card);border-radius:18px;box-shadow:0 10px 26px rgba(0,0,0,.06);padding:22px}
+    h1{margin:0 0 6px}
+    .lead{color:var(--muted);margin:0 0 12px}
+    .section{
+      border:1px dashed var(--divider); border-radius:14px; padding:16px; margin:14px 0;
+      background:linear-gradient(0deg,#fff, #fff) padding-box,
+                 linear-gradient(90deg,transparent 0,transparent 6px,var(--divider) 6px,var(--divider) 7px,transparent 7px,transparent 100%) border-box;
     }
-    .card {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 10px 24px rgba(0,0,0,.06);
-      padding: 20px;
+    .section.teacher{background-color:var(--teacher);border:1px solid #c7d2fe;}
+    .section.student{background-color:var(--student);border:1px solid #bbf7d0;}
+    .section-title{font-weight:800;margin:0 0 10px;display:flex;gap:8px;align-items:center}
+    .row{display:grid;grid-template-columns:1fr;gap:12px}
+    @media(min-width:760px){ .row.two{grid-template-columns:1fr 1fr} }
+    label{font-weight:600;display:block;margin-bottom:6px}
+    input,textarea{
+      width:100%;border:1px solid var(--divider);border-radius:12px;padding:12px;background:#fff;font-size:1rem
     }
-    h1 { margin-top: 0; }
-    .row { display: grid; grid-template-columns: 1fr; gap: 12px; }
-    label { font-weight: 600; display: block; margin-bottom: 6px; }
-    input, textarea {
-      width: 100%; border: 1px solid #ddd; border-radius: 10px;
-      padding: 10px; font-size: 1rem;
+    textarea{min-height:90px;resize:vertical}
+    .hint{color:var(--muted);font-size:.92rem;margin-top:4px}
+
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{
+      background:var(--chip);border:1px solid var(--divider);border-radius:999px;padding:10px 14px;cursor:pointer;user-select:none;
+      display:inline-flex;align-items:center;gap:8px;font-weight:600
     }
-    textarea { min-height: 80px; resize: vertical; }
-    .chips { display:flex; gap:8px; flex-wrap:wrap; }
-    .chip {
-      background:#f3f4f6; border:1px solid #e5e7eb; border-radius:999px;
-      padding:8px 12px; cursor:pointer; user-select:none;
+    .chip.active{background:var(--chip-on);border-color:#c7d2fe}
+    .stars{display:flex;gap:8px;font-size:28px;cursor:pointer}
+    .star{filter:grayscale(1) opacity(.35);transition:transform .1s, filter .1s}
+    .star.active,.star.hover{filter:none;transform:scale(1.05)}
+    .divider{height:1px;background:var(--divider);margin:16px 0}
+    .actions{display:flex;gap:12px;align-items:center}
+    button{
+      background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer
     }
-    .chip.active { background:#eef2ff; border-color:#c7d2fe; }
-    .stars { display:flex; gap:8px; font-size:26px; cursor:pointer; }
-    .star { filter:grayscale(1) opacity(.35); transition:transform .1s,filter .1s; }
-    .star.active,.star.hover { filter:none; transform:scale(1.05); }
-    button {
-      background:#4f46e5; color:white; border:none; border-radius:10px;
-      padding:12px 16px; font-weight:700; cursor:pointer; font-size:1rem;
-    }
-    #ok { display:none; color:#059669; font-weight:600; }
+    #ok{display:none;color:var(--success);font-weight:700}
+    .badge{font-size:.82rem;background:#fff;border:1px solid var(--divider);padding:4px 8px;border-radius:999px;color:var(--muted)}
+    .gridline{border-left:4px solid #c7d2fe;padding-left:10px}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
       <h1>Pesquisa Kids ⭐</h1>
-      <p>Responda com sinceridade! 😊</p>
+      <p class="lead">Ajude a melhorar as aulas!</p>
 
-      <form id="form">
+      <!-- Identificação básica -->
+      <div class="row two">
+        <div>
+          <label>Nome do aluno</label>
+          <input id="nome" placeholder="Ex.: Ana Souza" required />
+        </div>
+        <div>
+          <label>Idade</label>
+          <input id="idade" type="number" min="5" max="12" placeholder="Ex.: 9" required />
+        </div>
+      </div>
+
+      <!-- Sobre o Professor -->
+      <div class="section teacher">
+        <h3 class="section-title">👩‍🏫 Sobre o Professor(a)</h3>
         <div class="row">
-          <div>
-            <label>Nome</label>
-            <input id="nome" required />
+          <div class="gridline">
+            <label>O(a) professor(a) explica bem?</label>
+            <div class="stars" data-field="prof_explica"></div>
+            <div class="hint">Avaliação de 1 a 5 estrelas</div>
           </div>
-          <div>
-            <label>Idade</label>
-            <input id="idade" type="number" min="5" max="12" required />
+          <div class="gridline">
+            <label>O(a) professor(a) é simpático(a)?</label>
+            <div class="stars" data-field="prof_simpatia"></div>
+          </div>
+          <div class="gridline">
+            <label>O(a) professor(a) chega no horário?</label>
+            <div class="stars" data-field="prof_pontualidade"></div>
+          </div>
+          <div class="gridline">
+            <label>O(a) professor(a) demonstra conhecimento?</label>
+            <div class="stars" data-field="prof_conhecimento"></div>
           </div>
         </div>
+      </div>
 
-        <div class="row">
+      <!-- Sobre o Aluno -->
+      <div class="section student">
+        <h3 class="section-title">🧒 Sobre Mim (Aluno)</h3>
+
+        <div class="row two">
           <div>
             <label>O que você MAIS gostou no curso?</label>
-            <textarea id="gostou"></textarea>
+            <textarea id="gostou" placeholder="Conte pra gente!"></textarea>
           </div>
           <div>
             <label>Teve algo que você NÃO gostou?</label>
-            <textarea id="nao_gostou"></textarea>
+            <textarea id="nao_gostou" placeholder="Se quiser, pode pular."></textarea>
           </div>
         </div>
 
@@ -84,49 +118,81 @@
             <div class="chip">😅 Difíceis</div>
             <div class="chip">😵 Muito difíceis</div>
           </div>
+          <div class="hint">Escolha a opção que melhor te representa.</div>
         </div>
 
-        <div class="row">
-          <label>O professor explica bem?</label>
-          <div class="stars" data-field="prof_explica"></div>
-        </div>
-        <div class="row">
-          <label>O professor é simpático?</label>
-          <div class="stars" data-field="prof_simpatia"></div>
-        </div>
-        <div class="row">
-          <label>O professor chega no horário?</label>
-          <div class="stars" data-field="prof_pontualidade"></div>
-        </div>
-        <div class="row">
-          <label>O professor sabe bastante?</label>
-          <div class="stars" data-field="prof_conhecimento"></div>
+        <!-- Thumbs (antigos checkboxes) -->
+        <div class="row two">
+          <div>
+            <label>Eu chego no horário</label>
+            <div class="chips thumbs" data-field="eu_pontual">
+              <div class="chip">👍 Sim</div>
+              <div class="chip">👎 Não</div>
+            </div>
+          </div>
+          <div>
+            <label>Eu participo bastante</label>
+            <div class="chips thumbs" data-field="eu_participo">
+              <div class="chip">👍 Sim</div>
+              <div class="chip">👎 Não</div>
+            </div>
+          </div>
         </div>
 
-        <div class="row">
-          <label>Você recomendaria esse curso para um amigo?</label>
-          <div class="chips" data-field="recomendacao">
-            <div class="chip">👍 Sim</div>
-            <div class="chip">👎 Não</div>
+        <div class="row two">
+          <div>
+            <label>Eu me comporto bem</label>
+            <div class="chips thumbs" data-field="eu_comporto">
+              <div class="chip">👍 Sim</div>
+              <div class="chip">👎 Não</div>
+            </div>
+          </div>
+          <div>
+            <label>Eu sou organizado(a) para as aulas</label>
+            <div class="chips thumbs" data-field="eu_organizado">
+              <div class="chip">👍 Sim</div>
+              <div class="chip">👎 Não</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row two">
+          <div>
+            <label>Eu me sinto confiante para explicar o que aprendi</label>
+            <div class="chips thumbs" data-field="eu_confiante">
+              <div class="chip">👍 Sim</div>
+              <div class="chip">👎 Não</div>
+            </div>
+          </div>
+          <div>
+            <label>O que você acha que pode melhorar?</label>
+            <textarea id="auto_melhorar" placeholder="Ex.: Ler as instruções com calma, praticar em casa, perguntar mais..."></textarea>
           </div>
         </div>
 
         <div class="row">
-          <label><input type="checkbox" id="eu_pontual"> Eu chego no horário</label>
-          <label><input type="checkbox" id="eu_participo"> Eu participo bastante</label>
-          <label><input type="checkbox" id="eu_comporto"> Eu me comporto bem</label>
+          <label>Você recomendaria esse curso para um amigo?</label>
+          <div class="chips thumbs" data-field="recomendacao">
+            <div class="chip">👍 Sim</div>
+            <div class="chip">👎 Não</div>
+          </div>
         </div>
+      </div>
 
-        <button type="submit">Enviar</button>
+      <div class="divider"></div>
+
+      <div class="actions">
+        <button id="btn">Enviar respostas</button>
         <span id="ok">✅ Enviado com sucesso!</span>
-      </form>
+      </div>
     </div>
   </div>
 
   <script>
-    const ENDPOINT = "https://script.google.com/macros/s/AKfycbyJxNbSspGJ2AEBVpjStwYYF2WpBUffVuUfSxvdUV5teNtm-kUsD9p82m3xiY58HFDt/exec"; // cole aqui o /exec do Apps Script
+    // Cole aqui a URL /exec do seu Apps Script
+    const ENDPOINT = "https://script.google.com/macros/s/AKfycbyJxNbSspGJ2AEBVpjStwYYF2WpBUffVuUfSxvdUV5teNtm-kUsD9p82m3xiY58HFDt/exec";
 
-    // Estrelas
+    // --- Estrelas (Professor) ---
     const starBars = document.querySelectorAll(".stars");
     const starValues = {};
     starBars.forEach(bar => {
@@ -153,7 +219,7 @@
     }
     function select(field,i){ starValues[field] = i; paint(field); }
 
-    // Chips
+    // --- Chips (dificuldade, thumbs, etc.) ---
     const groups = document.querySelectorAll(".chips");
     groups.forEach(g => g.addEventListener("click", e => {
       const chip = e.target.closest(".chip");
@@ -171,39 +237,51 @@
       return starValues[field] || 0;
     }
 
-    // Envio
-    document.getElementById("form").addEventListener("submit", async (e)=>{
+    // --- Envio ---
+    document.getElementById("btn").addEventListener("click", async (e)=>{
       e.preventDefault();
+
       const nome = document.getElementById("nome").value.trim();
       const idade = document.getElementById("idade").value.trim();
       if (!nome || !idade){ alert("Preencha nome e idade 🙂"); return; }
 
       const data = {
+        // identificação
         nome, idade,
-        gostou: document.getElementById("gostou").value.trim(),
-        nao_gostou: document.getElementById("nao_gostou").value.trim(),
-        dificuldade: valueFromChips("dificuldade"),
+
+        // professor (estrelas)
         prof_explica: valueFromStars("prof_explica"),
         prof_simpatia: valueFromStars("prof_simpatia"),
         prof_pontualidade: valueFromStars("prof_pontualidade"),
         prof_conhecimento: valueFromStars("prof_conhecimento"),
+
+        // aluno (texto / dificuldade / thumbs)
+        gostou: document.getElementById("gostou").value.trim(),
+        nao_gostou: document.getElementById("nao_gostou").value.trim(),
+        dificuldade: valueFromChips("dificuldade"),
+
+        eu_pontual: valueFromChips("eu_pontual") || "",
+        eu_participo: valueFromChips("eu_participo") || "",
+        eu_comporto: valueFromChips("eu_comporto") || "",
+        eu_organizado: valueFromChips("eu_organizado") || "",
+        eu_confiante: valueFromChips("eu_confiante") || "",
+        auto_melhorar: document.getElementById("auto_melhorar").value.trim(),
+
         recomendacao: valueFromChips("recomendacao"),
-        eu_pontual: document.getElementById("eu_pontual").checked ? "Sim" : "Não",
-        eu_participo: document.getElementById("eu_participo").checked ? "Sim" : "Não",
-        eu_comporto: document.getElementById("eu_comporto").checked ? "Sim" : "Não",
         timestamp: new Date().toISOString()
       };
 
       try{
         await fetch(ENDPOINT, {
           method: "POST",
-          mode: "no-cors",
-          body: JSON.stringify(data)
+          mode: "no-cors",        // importante para funcionar no Pages
+          body: JSON.stringify(data) // sem headers!
         });
         document.getElementById("ok").style.display = "inline-block";
-        e.target.reset();
+        // opcional: limpar campos básicos
+        // document.getElementById("form")?.reset();
       }catch(err){
-        alert("Não foi possível enviar agora. Verifique sua conexão.");
+        alert("Não foi possível enviar agora. Verifique a conexão e tente novamente.");
         console.error(err);
       }
     });
