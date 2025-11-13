@@ -1,290 +1,327 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pesquisa Kids ⭐</title>
-  <style>
-    :root{
-      --bg:#f7fafc; --card:#fff; --ink:#111827; --muted:#6b7280; --accent:#4f46e5;
-      --divider:#e5e7eb; --chip:#f3f4f6; --chip-on:#eef2ff; --success:#059669;
-      --teacher:#e0e7ff; --student:#dcfce7;
-    }
-    *{box-sizing:border-box}
-    body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);margin:0}
-    .wrap{max-width:920px;margin:24px auto;padding:16px}
-    .card{background:var(--card);border-radius:18px;box-shadow:0 10px 26px rgba(0,0,0,.06);padding:22px}
-    h1{margin:0 0 6px}
-    .lead{color:var(--muted);margin:0 0 12px}
-    .section{
-      border:1px dashed var(--divider); border-radius:14px; padding:16px; margin:14px 0;
-      background:linear-gradient(0deg,#fff, #fff) padding-box,
-                 linear-gradient(90deg,transparent 0,transparent 6px,var(--divider) 6px,var(--divider) 7px,transparent 7px,transparent 100%) border-box;
-    }
-    .section.teacher{background-color:var(--teacher);border:1px solid #c7d2fe;}
-    .section.student{background-color:var(--student);border:1px solid #bbf7d0;}
-    .section-title{font-weight:800;margin:0 0 10px;display:flex;gap:8px;align-items:center}
-    .row{display:grid;grid-template-columns:1fr;gap:12px}
-    @media(min-width:760px){ .row.two{grid-template-columns:1fr 1fr} }
-    label{font-weight:600;display:block;margin-bottom:6px}
-    input,textarea{
-      width:100%;border:1px solid var(--divider);border-radius:12px;padding:12px;background:#fff;font-size:1rem
-    }
-    textarea{min-height:90px;resize:vertical}
-    .hint{color:var(--muted);font-size:.92rem;margin-top:4px}
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pesquisa Kids ⭐</title>
 
-    .chips{display:flex;gap:8px;flex-wrap:wrap}
-    .chip{
-      background:var(--chip);border:1px solid var(--divider);border-radius:999px;padding:10px 14px;cursor:pointer;user-select:none;
-      display:inline-flex;align-items:center;gap:8px;font-weight:600
-    }
-    .chip.active{background:var(--chip-on);border-color:#c7d2fe}
-    .stars{display:flex;gap:8px;font-size:28px;cursor:pointer}
-    .star{filter:grayscale(1) opacity(.35);transition:transform .1s, filter .1s}
-    .star.active,.star.hover{filter:none;transform:scale(1.05)}
-    .divider{height:1px;background:var(--divider);margin:16px 0}
-    .actions{display:flex;gap:12px;align-items:center}
-    button{
-      background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer
-    }
-    #ok{display:none;color:var(--success);font-weight:700}
-    .badge{font-size:.82rem;background:#fff;border:1px solid var(--divider);padding:4px 8px;border-radius:999px;color:var(--muted)}
-    .gridline{border-left:4px solid #c7d2fe;padding-left:10px}
-  </style>
+<style>
+  :root{
+    --bg:#f7fafc;
+    --card:#ffffff;
+    --ink:#111827;
+    --muted:#6b7280;
+    --accent:#4f46e5;
+    --line:#e5e7eb;
+    --chip:#f3f4f6;
+    --chip-on:#eef2ff;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+  }
+  .wrap{max-width:920px;margin:24px auto;padding:16px}
+  .card{
+    background:var(--card);
+    border-radius:18px;
+    padding:22px;
+    box-shadow:0 10px 26px rgba(0,0,0,.06);
+  }
+  h1{margin:0 0 6px}
+  .lead{color:var(--muted);margin:0 0 12px}
+  .section{
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px;
+    margin:14px 0;
+  }
+  .section.teacher{background:#e0e7ff}
+  .section.student{background:#dcfce7}
+  .section-title{
+    font-weight:800;
+    margin:0 0 10px;
+    display:flex;gap:8px;align-items:center
+  }
+  .row{display:grid;gap:12px}
+  @media(min-width:760px){ .row.two{grid-template-columns:1fr 1fr;} }
+
+  label{font-weight:600;display:block;margin-bottom:6px}
+  input,textarea{
+    width:100%;border:1px solid var(--line);border-radius:12px;
+    padding:10px;font-size:1rem;background:#fff;
+  }
+  textarea{min-height:80px;resize:vertical}
+  .hint{color:var(--muted);font-size:.9rem;margin-top:4px}
+
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{
+    background:var(--chip);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:8px 12px;
+    cursor:pointer;
+    user-select:none;
+    display:inline-flex;
+    gap:6px;
+    align-items:center;
+    font-weight:600;
+  }
+  .chip.active{
+    background:var(--chip-on);
+    border-color:#c7d2fe;
+  }
+
+  .stars{display:flex;gap:6px;font-size:26px;cursor:pointer}
+  .star{filter:grayscale(1) opacity(.35);transition:.1s}
+  .star.active,.star.hover{filter:none;transform:scale(1.05)}
+
+  .actions{margin-top:18px;display:flex;gap:12px;align-items:center}
+  button{
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:10px 16px;
+    border-radius:12px;
+    font-weight:800;
+    cursor:pointer;
+  }
+  #ok{display:none;color:#059669;font-weight:700}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <h1>Pesquisa Kids ⭐</h1>
-      <p class="lead">Ajude a melhorar as aulas!</p>
+<div class="wrap">
+  <div class="card">
+    <h1>Pesquisa Kids ⭐</h1>
+    <p class="lead">Responda junto com o(a) aluno(a). É rápido e nos ajuda muito!</p>
 
-      <!-- Identificação básica -->
-      <div class="row two">
+    <!-- IDENTIFICAÇÃO -->
+    <div class="row two">
+      <div>
+        <label>Nome do aluno</label>
+        <input id="nome" placeholder="Ex.: Ana Souza" required />
+      </div>
+      <div>
+        <label>Idade</label>
+        <input id="idade" type="number" min="5" max="11" placeholder="Ex.: 8" required />
+      </div>
+    </div>
+
+    <!-- PROFESSOR -->
+    <div class="section teacher">
+      <h3 class="section-title">👩‍🏫 Sobre o Professor(a)</h3>
+
+      <label>Explica bem?</label>
+      <div class="stars" data-field="prof_explica"></div>
+      <div class="hint">Marque de 1 a 5 estrelas</div>
+
+      <label>É simpático(a)?</label>
+      <div class="stars" data-field="prof_simpatia"></div>
+
+      <label>Chega no horário?</label>
+      <div class="stars" data-field="prof_pontualidade"></div>
+
+      <label>Mostra que conhece o assunto?</label>
+      <div class="stars" data-field="prof_conhecimento"></div>
+    </div>
+
+    <!-- ALUNO -->
+    <div class="section student">
+      <h3 class="section-title">🧒 Sobre o aluno</h3>
+
+      <label>Como você se sente nas aulas?</label>
+      <div class="chips" data-field="sentimento">
+        <div class="chip">😍 Amo as aulas</div>
+        <div class="chip">😄 Gosto bastante</div>
+        <div class="chip">😐 Tanto faz</div>
+        <div class="chip">😕 Não gosto muito</div>
+      </div>
+
+      <div class="row two" style="margin-top:10px;">
         <div>
-          <label>Nome do aluno</label>
-          <input id="nome" placeholder="Ex.: Ana Souza" required />
+          <label>O que você MAIS gostou?</label>
+          <textarea id="mais_gostou" placeholder="Alguma atividade, jogo, professor..."></textarea>
         </div>
         <div>
-          <label>Idade</label>
-          <input id="idade" type="number" min="5" max="12" placeholder="Ex.: 9" required />
+          <label>Teve algo que NÃO gostou?</label>
+          <textarea id="menos_gostou" placeholder="Se quiser, pode deixar em branco."></textarea>
         </div>
       </div>
 
-      <!-- Sobre o Professor -->
-      <div class="section teacher">
-        <h3 class="section-title">👩‍🏫 Sobre o Professor(a)</h3>
-        <div class="row">
-          <div class="gridline">
-            <label>O(a) professor(a) explica bem?</label>
-            <div class="stars" data-field="prof_explica"></div>
-            <div class="hint">Avaliação de 1 a 5 estrelas</div>
-          </div>
-          <div class="gridline">
-            <label>O(a) professor(a) é simpático(a)?</label>
-            <div class="stars" data-field="prof_simpatia"></div>
-          </div>
-          <div class="gridline">
-            <label>O(a) professor(a) chega no horário?</label>
-            <div class="stars" data-field="prof_pontualidade"></div>
-          </div>
-          <div class="gridline">
-            <label>O(a) professor(a) demonstra conhecimento?</label>
-            <div class="stars" data-field="prof_conhecimento"></div>
-          </div>
-        </div>
+      <label>As aulas foram...</label>
+      <div class="chips" data-field="dificuldade">
+        <div class="chip">😄 Muito fáceis</div>
+        <div class="chip">🙂 Fáceis</div>
+        <div class="chip">😌 Normais</div>
+        <div class="chip">😅 Difíceis</div>
+        <div class="chip">😵 Muito difíceis</div>
       </div>
 
-      <!-- Sobre o Aluno -->
-      <div class="section student">
-        <h3 class="section-title">🧒 Sobre Mim (Aluno)</h3>
-
-        <div class="row two">
-          <div>
-            <label>O que você MAIS gostou no curso?</label>
-            <textarea id="gostou" placeholder="Conte pra gente!"></textarea>
-          </div>
-          <div>
-            <label>Teve algo que você NÃO gostou?</label>
-            <textarea id="nao_gostou" placeholder="Se quiser, pode pular."></textarea>
+      <div class="row two" style="margin-top:10px;">
+        <div>
+          <label>Eu chego no horário</label>
+          <div class="chips" data-field="eu_pontual">
+            <div class="chip">👍 Sim</div>
+            <div class="chip">👎 Não</div>
           </div>
         </div>
-
-        <div class="row">
-          <label>As aulas foram...</label>
-          <div class="chips" data-field="dificuldade">
-            <div class="chip">😄 Muito fáceis</div>
-            <div class="chip">🙂 Fáceis</div>
-            <div class="chip">😌 Normais</div>
-            <div class="chip">😅 Difíceis</div>
-            <div class="chip">😵 Muito difíceis</div>
-          </div>
-          <div class="hint">Escolha a opção que melhor te representa.</div>
-        </div>
-
-        <!-- Thumbs (antigos checkboxes) -->
-        <div class="row two">
-          <div>
-            <label>Eu chego no horário</label>
-            <div class="chips thumbs" data-field="eu_pontual">
-              <div class="chip">👍 Sim</div>
-              <div class="chip">👎 Não</div>
-            </div>
-          </div>
-          <div>
-            <label>Eu participo bastante</label>
-            <div class="chips thumbs" data-field="eu_participo">
-              <div class="chip">👍 Sim</div>
-              <div class="chip">👎 Não</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row two">
-          <div>
-            <label>Eu me comporto bem</label>
-            <div class="chips thumbs" data-field="eu_comporto">
-              <div class="chip">👍 Sim</div>
-              <div class="chip">👎 Não</div>
-            </div>
-          </div>
-          <div>
-            <label>Eu sou organizado(a) para as aulas</label>
-            <div class="chips thumbs" data-field="eu_organizado">
-              <div class="chip">👍 Sim</div>
-              <div class="chip">👎 Não</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row two">
-          <div>
-            <label>Eu me sinto confiante para explicar o que aprendi</label>
-            <div class="chips thumbs" data-field="eu_confiante">
-              <div class="chip">👍 Sim</div>
-              <div class="chip">👎 Não</div>
-            </div>
-          </div>
-          <div>
-            <label>O que você acha que pode melhorar?</label>
-            <textarea id="auto_melhorar" placeholder="Ex.: Ler as instruções com calma, praticar em casa, perguntar mais..."></textarea>
-          </div>
-        </div>
-
-        <div class="row">
-          <label>Você recomendaria esse curso para um amigo?</label>
-          <div class="chips thumbs" data-field="recomendacao">
+        <div>
+          <label>Eu participo bastante</label>
+          <div class="chips" data-field="eu_participo">
             <div class="chip">👍 Sim</div>
             <div class="chip">👎 Não</div>
           </div>
         </div>
       </div>
 
-      <div class="divider"></div>
-
-      <div class="actions">
-        <button id="btn">Enviar respostas</button>
-        <span id="ok">✅ Enviado com sucesso!</span>
+      <div class="row two">
+        <div>
+          <label>Eu me comporto bem</label>
+          <div class="chips" data-field="eu_comporto">
+            <div class="chip">👍 Sim</div>
+            <div class="chip">👎 Não</div>
+          </div>
+        </div>
+        <div>
+          <label>Eu sou organizado(a)</label>
+          <div class="chips" data-field="eu_organizado">
+            <div class="chip">👍 Sim</div>
+            <div class="chip">👎 Não</div>
+          </div>
+        </div>
       </div>
+
+      <div class="row two">
+        <div>
+          <label>Eu me esforço para aprender</label>
+          <div class="chips" data-field="eu_confiante">
+            <div class="chip">👍 Sim</div>
+            <div class="chip">👎 Não</div>
+          </div>
+        </div>
+        <div>
+          <label>O que você acha que pode melhorar?</label>
+          <input id="auto_melhorar" placeholder="Ex.: atenção, praticar mais..." />
+        </div>
+      </div>
+
+      <label style="margin-top:12px;">Você recomendaria esse curso para um amigo?</label>
+      <div class="chips" data-field="recomendacao">
+        <div class="chip">👍 Sim</div>
+        <div class="chip">👎 Não</div>
+      </div>
+
+      <!-- NOVO BLOCO: SUGESTÕES -->
+      <label style="margin-top:18px;">Sugestões para a escola / aulas / cursos (opcional)</label>
+      <textarea id="sugestoes_escola" placeholder="Quer sugerir alguma melhoria? Conte pra gente!"></textarea>
     </div>
+
+    <div class="actions">
+      <button id="enviar">Enviar respostas</button>
+      <span id="ok">✅ Enviado!</span>
+    </div>
+
   </div>
+</div>
 
-  <script>
-    // Cole aqui a URL /exec do seu Apps Script
-    const ENDPOINT = "https://script.google.com/macros/s/AKfycbxr_LLGhHy4xJmhgytJkISR3v48k2plddbT7p3oGq_ugR8A2VWzHMRFX1mHWzIzcPUr/exec";
-
-    // --- Estrelas (Professor) ---
-    const starBars = document.querySelectorAll(".stars");
-    const starValues = {};
-    starBars.forEach(bar => {
-      const field = bar.dataset.field;
-      starValues[field] = 0;
-      for (let i=1;i<=5;i++){
-        const s = document.createElement("span");
-        s.className = "star";
-        s.textContent = "★";
-        s.addEventListener("mouseenter", ()=>hover(field,i));
-        s.addEventListener("mouseleave", ()=>hover(field,0));
-        s.addEventListener("click", ()=>select(field,i));
-        bar.appendChild(s);
-      }
+<script>
+  /* ===== ESTRELAS ===== */
+  const starValues = {};
+  document.querySelectorAll(".stars").forEach(bar=>{
+    const field = bar.dataset.field;
+    starValues[field] = 0;
+    for(let i=1;i<=5;i++){
+      const s = document.createElement("span");
+      s.className = "star";
+      s.textContent = "★";
+      s.addEventListener("mouseenter",()=>hover(field,i));
+      s.addEventListener("mouseleave",()=>hover(field,0));
+      s.addEventListener("click",()=>select(field,i));
+      bar.appendChild(s);
+    }
+  });
+  function hover(field,n){
+    const bar = document.querySelector(`.stars[data-field="${field}"]`);
+    bar.querySelectorAll(".star").forEach((s,idx)=>{
+      s.classList.toggle("hover", idx < n);
     });
-    function paint(field){
-      const val = starValues[field];
-      const bar = document.querySelector(`.stars[data-field="${field}"]`);
-      [...bar.querySelectorAll(".star")].forEach((s,idx)=>s.classList.toggle("active", idx < val));
-    }
-    function hover(field,i){
-      const bar = document.querySelector(`.stars[data-field="${field}"]`);
-      [...bar.querySelectorAll(".star")].forEach((s,idx)=>s.classList.toggle("hover", idx < i));
-    }
-    function select(field,i){ starValues[field] = i; paint(field); }
+  }
+  function select(field,n){
+    starValues[field] = n;
+    const bar = document.querySelector(`.stars[data-field="${field}"]`);
+    bar.querySelectorAll(".star").forEach((s,idx)=>{
+      s.classList.toggle("active", idx < n);
+    });
+  }
+  function valueFromStars(field){ return starValues[field] || 0; }
 
-    // --- Chips (dificuldade, thumbs, etc.) ---
-    const groups = document.querySelectorAll(".chips");
-    groups.forEach(g => g.addEventListener("click", e => {
+  /* ===== CHIPS ===== */
+  document.querySelectorAll(".chips").forEach(group=>{
+    group.addEventListener("click",e=>{
       const chip = e.target.closest(".chip");
-      if (!chip) return;
-      g.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+      if(!chip) return;
+      group.querySelectorAll(".chip").forEach(c=>c.classList.remove("active"));
       chip.classList.add("active");
-      g.dataset.value = chip.textContent.trim();
-    }));
-
-    function valueFromChips(field){
-      const g = document.querySelector(`.chips[data-field="${field}"]`);
-      return g?.dataset?.value || "";
-    }
-    function valueFromStars(field){
-      return starValues[field] || 0;
-    }
-
-    // --- Envio ---
-    document.getElementById("btn").addEventListener("click", async (e)=>{
-      e.preventDefault();
-
-      const nome = document.getElementById("nome").value.trim();
-      const idade = document.getElementById("idade").value.trim();
-      if (!nome || !idade){ alert("Preencha nome e idade 🙂"); return; }
-
-      const data = {
-        // identificação
-        nome, idade,
-
-        // professor (estrelas)
-        prof_explica: valueFromStars("prof_explica"),
-        prof_simpatia: valueFromStars("prof_simpatia"),
-        prof_pontualidade: valueFromStars("prof_pontualidade"),
-        prof_conhecimento: valueFromStars("prof_conhecimento"),
-
-        // aluno (texto / dificuldade / thumbs)
-        gostou: document.getElementById("gostou").value.trim(),
-        nao_gostou: document.getElementById("nao_gostou").value.trim(),
-        dificuldade: valueFromChips("dificuldade"),
-
-        eu_pontual: valueFromChips("eu_pontual") || "",
-        eu_participo: valueFromChips("eu_participo") || "",
-        eu_comporto: valueFromChips("eu_comporto") || "",
-        eu_organizado: valueFromChips("eu_organizado") || "",
-        eu_confiante: valueFromChips("eu_confiante") || "",
-        auto_melhorar: document.getElementById("auto_melhorar").value.trim(),
-
-        recomendacao: valueFromChips("recomendacao"),
-        timestamp: new Date().toISOString()
-      };
-
-      try{
-        await fetch(ENDPOINT, {
-          method: "POST",
-          mode: "no-cors",        // importante para funcionar no Pages
-          body: JSON.stringify(data) // sem headers!
-        });
-        document.getElementById("ok").style.display = "inline-block";
-        // opcional: limpar campos básicos
-        // document.getElementById("form")?.reset();
-      }catch(err){
-        alert("Não foi possível enviar agora. Verifique a conexão e tente novamente.");
-        console.error(err);
-      }
+      group.dataset.value = chip.textContent.trim();
     });
-  </script>
+  });
+  function valueFromChips(field){
+    const g = document.querySelector(`.chips[data-field="${field}"]`);
+    return g?.dataset?.value || "";
+  }
+
+  /* ===== ENVIO PARA APP SCRIPT ===== */
+  const ENDPOINT = "COLE_AQUI_A_URL_DO_WEBAPP";  // troque pela URL /exec
+
+  document.getElementById("enviar").addEventListener("click", async ()=>{
+    const nome  = document.getElementById("nome").value.trim();
+    const idade = document.getElementById("idade").value.trim();
+    if(!nome || !idade){
+      alert("Preencha nome e idade 🙂");
+      return;
+    }
+
+    const data = {
+      nome,
+      idade,
+      sentimento: valueFromChips("sentimento"),
+      mais_gostou: document.getElementById("mais_gostou").value.trim(),
+      menos_gostou: document.getElementById("menos_gostou").value.trim(),
+      dificuldade: valueFromChips("dificuldade"),
+
+      prof_explica:      valueFromStars("prof_explica"),
+      prof_simpatia:     valueFromStars("prof_simpatia"),
+      prof_pontualidade: valueFromStars("prof_pontualidade"),
+      prof_conhecimento: valueFromStars("prof_conhecimento"),
+
+      recomendacao: valueFromChips("recomendacao"),
+      eu_pontual:   valueFromChips("eu_pontual"),
+      eu_participo: valueFromChips("eu_participo"),
+      eu_comporto:  valueFromChips("eu_comporto"),
+      eu_organizado:valueFromChips("eu_organizado"),
+      eu_confiante: valueFromChips("eu_confiante"),
+
+      auto_melhorar: document.getElementById("auto_melhorar").value.trim(),
+      sugestoes_escola: document.getElementById("sugestoes_escola").value.trim(),
+
+      timestamp: new Date().toISOString()
+    };
+
+    try{
+      await fetch(ENDPOINT, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify(data)
+      });
+      document.getElementById("ok").style.display = "inline-block";
+      alert("Respostas enviadas! Muito obrigado 🙌");
+    }catch(err){
+      alert("Erro ao enviar. Tente novamente.");
+      console.error(err);
+    }
+  });
+</script>
 </body>
 </html>
